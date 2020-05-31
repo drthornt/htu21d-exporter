@@ -1,0 +1,36 @@
+H   T   U   2   1   D   .   _   _   i   n   i   t   _   _   (   )       H   T   U   2   1   D   _   A   D   D   R       i   s 6   4  \n
+H   T   U   2   1   D   .   _   _   i   n   i   t   _   _   (   )       H   T   U   2   1   D   _   A   D   D   R       t   y   p   e       <   t   y   p   e       '   i   n  t   '   >  \n
+H   T   U   2   1   D   .   _   _   i   n   i   t   _   _   (   )       C   M   D   _   S   O   F   T   _   R   E   S   E   T       i   s     376  \n
+H   T   U   2   1   D   .   _   _   i   n   i   t   _   _   (   )       C   M   D   _   S   O   F   T   _   R   E   S   E   T       t   y   p   e    <   t   y   p   e       '   s   t   r   '   >  \n
+S   e   n   d   i   n   g       s   o   f   t       r   e   s   e   t   376 \n
+i   2   c   .   w   r   i   t   e   (   )       W   r i   t   i   n   g       b   y   t   e   s     376  \n
+i   2   c   .   w   r   i   t   e   (   )       t   y   p   e       o
+f       b   y   t   e   s       <   t   y   p   e       '   s
+t   r   '   >  \n   i   2   c   .   w   r   i   t   e   (   )s   i   z   e   o   f       o   f       b   y   t   e   s
+0000440       2   2  \n   i   2   c   .   w   r   i   t   e   (   )    
+0000460   l   e   n       o   f       b   y   t   e   s       1  \n   r
+0000500   e   t   u   r   n       o   n       C   M   D   _   S   O   F
+0000520   T   _   R   E   S   E   T       i   s       N   o   n   e  \n
+0000540   T   e   m   p   :       r   e   a   d   _   t   m   p   e   r
+0000560   a   t   u   r   e  \n   w   r   i   t   e       C   M   D   _
+0000600   R   E   A   D   _   T   E   M   P   _   N   O   H   O   L   D
+0000620     363  \n   i   2   c   .   w   r   i   t   e   (   )       W
+0000640   r   i   t   i   n   g       b   y   t   e   s     363  \n   i
+0000660   2   c   .   w   r   i   t   e   (   )       t   y   p   e    
+0000700   o   f       b   y   t   e   s       <   t   y   p   e       '
+0000720   s   t   r   '   >  \n   i   2   c   .   w   r   i   t   e   (
+0000740   )       s   i   z   e   o   f       o   f       b   y   t   e
+0000760   s       2   2  \n   i   2   c   .   w   r   i   t   e   (   )
+0001000       l   e   n       o   f       b   y   t   e   s       1  \n
+0001020   2   3   .   6   9   9   6   9   2   3   8   2   8       C  \n
+0001040   H   u   m   i   d   :       i   2   c   .   w   r   i   t   e
+0001060   (   )       W   r   i   t   i   n   g       b   y   t   e   s
+0001100     365  \n   i   2   c   .   w   r   i   t   e   (   )       t
+0001120   y   p   e       o   f       b   y   t   e   s       <   t   y
+0001140   p   e       '   s   t   r   '   >  \n   i   2   c   .   w   r
+0001160   i   t   e   (   )       s   i   z   e   o   f       o   f    
+0001200   b   y   t   e   s       2   2  \n   i   2   c   .   w   r   i
+0001220   t   e   (   )       l   e   n       o   f       b   y   t   e
+0001240   s       1  \n   2   3   .   2   8   1   6   1   6   2   1   0
+0001260   9       %       r   H  \n
+0001267
