@@ -1,25 +1,38 @@
 #!/usr/bin/env python3
 
-import struct, array, time, io, fcntl, sys
+import random, logging, struct, array, time, io, fcntl, sys
 
+from prometheus_client import start_http_server, Summary, Gauge
+from prometheus_client import Gauge
+
+# from smbus2 import SMBus
+
+# I2C_SLAVE= 703 # 0x0703
 I2C_SLAVE=0x0703
+# HTU21D_ADDR = 40 # 0x40
 HTU21D_ADDR = 0x40
-CMD_READ_TEMP_HOLD = "\xE3"
-CMD_READ_HUM_HOLD = "\xE5"
+CMD_READ_TEMP_HOLD = b'\xe3' # 0xE3
+CMD_READ_HUM_HOLD = b'\xe5' # 0xE5
+CMD_READ_TEMP_NOHOLD = b'\xf3' # 0xF3
+CMD_READ_HUM_NOHOLD = b'\xf5' # 0xF5
+CMD_WRITE_USER_REG = b'\xe6' # 0xE6
+CMD_READ_USER_REG = b'\xe7' # 0xE7
+CMD_SOFT_RESET= b'\376'
 
-# CMD_READ_TEMP_NOHOLD = "\xF3"
-CMD_READ_TEMP_NOHOLD = b'\363'
+print ("RESET is {}".format(CMD_SOFT_RESET))
 
-# CMD_READ_HUM_NOHOLD = "\xF5"
-CMD_READ_HUM_NOHOLD = b'\365'
+# Create a metric to track time spent and requests made.
+# REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+HUMIDITY = Gauge('relative_humidity', 'Relative Humidity')
+TEMPERATURE = Gauge('temperature', 'Temperature')
 
-CMD_WRITE_USER_REG = "\xE6"
-CMD_READ_USER_REG = "\xE7"
-
-#CMD_SOFT_RESET= "\xFE"
-#CMD_SOFT_RESET= 0xFE
-#CMD_SOFT_RESET = 376
-CMD_SOFT_RESET = b'\376'
+logger = logging.getLogger(sys.argv[0])
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler(sys.stdout)
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 class i2c(object):
   def __init__(self, device, bus):
@@ -41,6 +54,7 @@ class i2c(object):
   def close(self):
     self.fw.close()
     self.fr.close()
+
 
 class HTU21D(object):
   def __init__(self):
@@ -81,10 +95,26 @@ class HTU21D(object):
     else:
       return False
 
-  def read_tmperature(self):
-    print("HTU21D.read_tmperature()")
-    print("HTU21D.read_tmperature() type of CMD_READ_TEMP_NOHOLD {}".format(type(CMD_READ_TEMP_NOHOLD)))
-    print("HTU21D.read_tmperature() CMD_READ_TEMP_NOHOLD is {}".format(CMD_READ_TEMP_NOHOLD))
+  def crc8check(self, value):
+    # Ported from Sparkfun Arduino HTU21D Library: https://github.com/sparkfun/HTU21D_Breakout
+    remainder = ( ( value[0] << 8 ) + value[1] ) << 8
+    remainder |= value[2]
+
+    # POLYNOMIAL = 0x0131 = x^8 + x^5 + x^4 + 1
+    # divsor = 0x988000 is the 0x0131 polynomial shifted to farthest left of three bytes
+    divsor = 0x988000
+
+    for i in range(0, 16):
+      if( remainder & 1 << (23 - i) ):
+        remainder ^= divsor
+      divsor = divsor >> 1
+
+    if remainder == 0:
+      return True
+    else:
+      return False
+
+  def read_temperature(self):
     self.dev.write(CMD_READ_TEMP_NOHOLD) #measure temp
     time.sleep(.1)
 
@@ -102,6 +132,7 @@ class HTU21D(object):
     time.sleep(.1)
 
     data = self.dev.read(3)
+    print ("HTU21D.read_humidity(): {}".format(data))
     buf = array.array('B', data)
 
     if self.crc8check(buf):
@@ -110,8 +141,25 @@ class HTU21D(object):
     else:
       return -255
 
-if __name__ == "__main__":
-  obj = HTU21D()
-  print("Temp: {} C".format(obj.read_tmperature()))
-  print("Humid:{} % rH".format(obj.read_humidity()))
+def update_gauges(device):
+  HUMIDITY.set(device.read_humidity())
+  TEMPERATURE.set(device.read_temperature())
+
+if __name__ == '__main__':
+
+  logger.info("initilize htu sensor")
+  myhtu = HTU21D()
+
+  logger.info("initalise gauges")
+  update_gauges(myhtu)
+
+  logger.info('Startup')
+  # Start up the server to expose the metrics.
+  start_http_server(8000)
+  logger.info('Prometheus server started')
+  
+  while True:
+    logger.debug("tick")
+    time.sleep(60)
+    update_gauges(myhtu)
 

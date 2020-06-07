@@ -24,13 +24,17 @@ class i2c(object):
       fcntl.ioctl(self.fw, I2C_SLAVE, device)
 
    def write(self, bytes):
-      print("i2c.write() Writing bytes {}".format(bytes))
+      print("i2c.write() Writing bytes @@ {}".format(bytes))
       print("i2c.write() type of bytes {}".format(type(bytes)))
       print("i2c.write() sizeof of bytes {}".format(sys.getsizeof(bytes)))
       print("i2c.write() len of bytes {}".format(len(bytes)))
       self.fw.write(bytes)
 
    def read(self, bytes):
+      print("i2c.read() read bytes {}".format(bytes))
+      print("i2c.read() type of bytes {}".format(type(bytes)))
+      print("i2c.read() sizeof of bytes {}".format(sys.getsizeof(bytes)))
+      # print("i2c.read() len of bytes {}".format(len(bytes)))
       return self.fr.read(bytes)
 
    def close(self):
