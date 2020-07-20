@@ -55,7 +55,6 @@ class i2c(object):
     self.fw.close()
     self.fr.close()
 
-
 class HTU21D(object):
   def __init__(self):
     if __debug__:
@@ -135,7 +134,8 @@ class HTU21D(object):
     time.sleep(.1)
 
     data = self.dev.read(3)
-    print ("HTU21D.read_humidity(): {}".format(data))
+    if __debug__:
+      print ("HTU21D.read_humidity(): {}".format(data))
     buf = array.array('B', data)
 
     if self.crc8check(buf):

@@ -3,8 +3,8 @@ Description=HTU21d Exporter
 
 [Service]
 User=nobody
-EnvironmentFile=/etc/sysconfig/htu21d_exporter
-ExecStart=/usr/bin/bin/htu21d-exporter.py $OPTIONS
+EnvironmentFile=/etc/default/htu21d_exporter
+ExecStart=/usr/bin/htu21d-exporter.py $OPTIONS
 
 [Install]
 WantedBy=multi-user.target
